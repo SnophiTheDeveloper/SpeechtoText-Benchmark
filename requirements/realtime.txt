@@ -1,0 +1,14 @@
+# Real-time STT dependencies (for local/server only, not Colab)
+-r whisper.txt
+
+# RealtimeSTT for real-time transcription
+RealtimeSTT>=0.1.0
+
+# Audio input
+pyaudio>=0.2.13
+
+# Voice activity detection
+webrtcvad>=2.0.10
+
+# Websocket for WhisperLiveKit
+websockets>=11.0.0

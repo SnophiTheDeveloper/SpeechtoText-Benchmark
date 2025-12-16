@@ -1,0 +1,8 @@
+# Common dependencies for all environments
+jiwer>=3.0.0
+pandas>=2.0.0
+pyyaml>=6.0
+tqdm>=4.65.0
+numpy>=1.24.0
+soundfile>=0.12.0
+librosa>=0.10.0

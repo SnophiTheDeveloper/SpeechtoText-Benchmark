@@ -1,0 +1,14 @@
+# Whisper model dependencies
+-r common.txt
+
+# Faster-Whisper (CTranslate2 based, faster inference)
+faster-whisper>=1.0.0
+
+# Transformers for distil-whisper and other HF models
+transformers>=4.35.0
+
+# PyTorch (CPU or CUDA depending on environment)
+torch>=2.0.0
+
+# For audio processing
+torchaudio>=2.0.0

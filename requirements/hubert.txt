@@ -1,0 +1,9 @@
+# HuBERT model dependencies
+-r common.txt
+
+# Transformers for HuBERT models
+transformers>=4.35.0
+
+# PyTorch
+torch>=2.0.0
+torchaudio>=2.0.0

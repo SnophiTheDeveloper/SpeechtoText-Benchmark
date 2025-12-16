@@ -1,0 +1,67 @@
+# Model weights (large files)
+models/weights/
+*.bin
+*.pt
+*.onnx
+*.safetensors
+
+# Cache
+__pycache__/
+.cache/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# Results (optional - you may want to commit results)
+# results/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Colab checkpoints
+.ipynb_checkpoints/
+
+# Test audio (can be large)
+test_data/*/audio/*.wav
+test_data/*/audio/*.mp3
+test_data/*/audio/*.flac
+test_data/cv-corpus-23.0-2025-09-05
+
+# Exports
+*.tar.gz
+server_package/
+
+# Logs
+*.log
+logs/
+results/*
+
+# HuggingFace cache
+.huggingface/
+
+# Claude Code settings
+.claude/
+
+# Notebooks
+notebooks/
+*.ipynb
+
+# Custom models (large)
+models/whisper-small-tr-ct2-int8/
+
+# Test data archives
+test_data/*.tar
+test_data/sps-corpus-*/
+test_data/mcv-*

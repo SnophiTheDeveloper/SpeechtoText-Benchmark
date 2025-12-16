@@ -1,0 +1,136 @@
+# STT Benchmark - Model Configurations
+# Each model family contains model definitions with their HuggingFace IDs and settings
+
+whisper:
+  # Faster-Whisper models (CTranslate2 based - recommended for speed)
+  faster-whisper-large-v3-turbo:
+    hf_model_id: "Systran/faster-whisper-large-v3-turbo"
+    compute_type: "float16"  # float16 for GPU, int8 for CPU
+    languages: ["tr", "en"]
+    supports_streaming: true
+    description: "Fastest large Whisper model, good balance of speed and accuracy"
+
+  faster-whisper-large-v3:
+    hf_model_id: "Systran/faster-whisper-large-v3"
+    compute_type: "float16"
+    languages: ["tr", "en"]
+    supports_streaming: true
+    description: "Most accurate Whisper model"
+
+  faster-whisper-medium:
+    hf_model_id: "Systran/faster-whisper-medium"
+    compute_type: "float16"
+    languages: ["tr", "en"]
+    supports_streaming: true
+    description: "Good balance for medium-sized deployments"
+
+  faster-whisper-small:
+    hf_model_id: "Systran/faster-whisper-small"
+    compute_type: "int8"
+    languages: ["tr", "en"]
+    supports_streaming: true
+    description: "Lightweight model suitable for CPU"
+
+  faster-whisper-base:
+    hf_model_id: "Systran/faster-whisper-base"
+    compute_type: "int8"
+    languages: ["tr", "en"]
+    supports_streaming: true
+    description: "Base model for quick testing"
+
+  # Distil-Whisper models (distilled for faster inference)
+  distil-whisper-large-v3:
+    hf_model_id: "distil-whisper/distil-large-v3"
+    compute_type: "float16"
+    languages: ["en"]  # English only
+    supports_streaming: true
+    description: "Distilled large-v3, 6x faster, English only"
+
+  distil-whisper-tr:
+    hf_model_id: "Sercan/distil-whisper-large-v3-tr"
+    compute_type: "float16"
+    languages: ["tr"]
+    supports_streaming: true
+    description: "Turkish fine-tuned distil-whisper"
+
+  # OpenAI Whisper via transformers
+  openai-whisper-large-v3-turbo:
+    hf_model_id: "openai/whisper-large-v3-turbo"
+    compute_type: "float16"
+    languages: ["tr", "en"]
+    supports_streaming: true
+    description: "Official OpenAI Whisper turbo model"
+
+wav2vec2:
+  # Turkish Wav2Vec2 models
+  wav2vec2-turkish-large:
+    hf_model_id: "m3hrdadfi/wav2vec2-large-xlsr-turkish"
+    languages: ["tr"]
+    supports_streaming: false
+    description: "Large Turkish Wav2Vec2 based on XLSR-53"
+
+  wav2vec2-turkish-base:
+    hf_model_id: "cahya/wav2vec2-base-turkish"
+    languages: ["tr"]
+    supports_streaming: false
+    description: "Base Turkish Wav2Vec2 model"
+
+  wav2vec2-xlsr-53:
+    hf_model_id: "facebook/wav2vec2-large-xlsr-53"
+    languages: ["multilingual"]
+    supports_streaming: false
+    description: "Multilingual Wav2Vec2 baseline (53 languages)"
+
+hubert:
+  # HuBERT models
+  hubert-large-ft:
+    hf_model_id: "facebook/hubert-large-ls960-ft"
+    languages: ["en"]
+    supports_streaming: false
+    description: "HuBERT large fine-tuned on LibriSpeech"
+
+  hubert-xlarge-ft:
+    hf_model_id: "facebook/hubert-xlarge-ls960-ft"
+    languages: ["en"]
+    supports_streaming: false
+    description: "HuBERT XLarge fine-tuned on LibriSpeech"
+
+  # Note: Turkish HuBERT models are limited
+  # Search HuggingFace for "asafaya hubert" or similar
+  # hubert-turkish:
+  #   hf_model_id: "TBD"
+  #   languages: ["tr"]
+  #   supports_streaming: false
+  #   description: "Turkish HuBERT model (if available)"
+
+# Model groups for batch testing
+groups:
+  whisper_all:
+    - faster-whisper-large-v3-turbo
+    - faster-whisper-large-v3
+    - faster-whisper-medium
+    - distil-whisper-tr
+
+  whisper_fast:
+    - faster-whisper-large-v3-turbo
+    - faster-whisper-small
+
+  turkish_all:
+    - faster-whisper-large-v3-turbo
+    - distil-whisper-tr
+    - wav2vec2-turkish-large
+    - wav2vec2-turkish-base
+
+  english_all:
+    - faster-whisper-large-v3-turbo
+    - distil-whisper-large-v3
+    - hubert-large-ft
+
+# Compute type recommendations by device
+compute_types:
+  cuda:
+    recommended: "float16"
+    alternatives: ["float32", "int8_float16"]
+  cpu:
+    recommended: "int8"
+    alternatives: ["float32"]

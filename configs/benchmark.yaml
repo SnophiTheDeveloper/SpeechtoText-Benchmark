@@ -1,0 +1,126 @@
+# STT Benchmark - Benchmark Configuration
+
+# General settings
+general:
+  default_language: "tr"
+  default_device: "cpu"
+  results_dir: "results"
+  test_data_dir: "test_data"
+  models_cache_dir: "models/weights"
+  log_level: "INFO"
+
+# Audio processing settings
+audio:
+  target_sample_rate: 16000
+  supported_formats:
+    - ".wav"
+    - ".mp3"
+    - ".flac"
+    - ".ogg"
+    - ".m4a"
+
+# Benchmark settings
+benchmark:
+  # Maximum number of files to process (null for all)
+  max_files: null
+
+  # Skip files longer than this duration (seconds, null to disable)
+  max_duration_seconds: 60
+
+  # Number of warmup runs before actual benchmark
+  warmup_runs: 1
+
+  # Whether to save per-file results
+  save_per_file_results: true
+
+  # Whether to show progress bar
+  show_progress: true
+
+  # Timeout per file (seconds)
+  timeout_seconds: 300
+
+# Streaming test settings
+streaming:
+  # Default chunk size in milliseconds
+  default_chunk_size_ms: 500
+
+  # Available chunk sizes for testing
+  chunk_sizes_ms:
+    - 250
+    - 500
+    - 1000
+    - 2000
+
+# Metrics settings
+metrics:
+  # Whether to normalize text before comparison
+  normalize_text: true
+
+  # Turkish-specific normalization
+  turkish_normalization:
+    lowercase: true
+    remove_punctuation: false
+
+  # English-specific normalization
+  english_normalization:
+    lowercase: true
+    remove_punctuation: false
+
+# Test data settings
+test_data:
+  # Common Voice download settings
+  common_voice:
+    version: "13.0"
+    default_num_samples: 10
+    split: "test"
+
+  # LibriSpeech settings (English)
+  librispeech:
+    subset: "test-clean"
+    default_num_samples: 10
+
+# Environment-specific settings
+environments:
+  colab:
+    device: "cuda"
+    compute_type: "float16"
+    batch_size: 1
+
+  local_cpu:
+    device: "cpu"
+    compute_type: "int8"
+    batch_size: 1
+
+  server_gpu:
+    device: "cuda"
+    compute_type: "float16"
+    batch_size: 1
+    offline_mode: true
+
+# Result output settings
+output:
+  # JSON formatting
+  json_indent: 2
+
+  # Include raw predictions in results
+  include_raw_predictions: true
+
+  # Include segment timestamps
+  include_segments: true
+
+  # Timestamp format for filenames
+  timestamp_format: "%Y-%m-%d_%H-%M"
+
+# Comparison settings
+comparison:
+  # Primary metric for ranking
+  primary_metric: "wer"
+
+  # Secondary metrics to include
+  secondary_metrics:
+    - "cer"
+    - "avg_rtf"
+    - "avg_latency_ms"
+
+  # Sort order (ascending = lower is better)
+  sort_ascending: true

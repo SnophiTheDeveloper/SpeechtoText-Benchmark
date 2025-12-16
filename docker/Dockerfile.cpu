@@ -1,0 +1,41 @@
+# STT Benchmark Docker Image - CPU Only
+# Lighter image without CUDA dependencies
+
+FROM python:3.10-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    libsndfile1 \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create working directory
+WORKDIR /app
+
+# Copy requirements
+COPY requirements/ requirements/
+
+# Install CPU-only PyTorch first
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+# Install other dependencies
+RUN pip install --no-cache-dir -r requirements/common.txt \
+    && pip install --no-cache-dir faster-whisper transformers datasets vosk
+
+# Copy source code
+COPY src/ src/
+COPY scripts/ scripts/
+COPY configs/ configs/
+COPY setup.py .
+
+# Create directories
+RUN mkdir -p models/weights test_data results
+
+# Environment
+ENV PYTHONPATH=/app
+ENV HF_HOME=/app/.cache/huggingface
+
+# Default command
+CMD ["python", "scripts/run_benchmark.py", "--device", "cpu", "--help"]

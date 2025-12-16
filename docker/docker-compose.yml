@@ -1,0 +1,98 @@
+services:
+  # Main benchmark service with GPU support
+  stt-benchmark:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        INSTALL_WHISPER: "true"
+        INSTALL_WAV2VEC2: "true"
+        INSTALL_HUBERT: "false"
+    image: stt-benchmark:latest
+    container_name: stt-benchmark
+
+    # GPU support
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+    # Volumes for persistent data
+    volumes:
+      - ../models/weights:/app/models/weights
+      - ../test_data:/app/test_data
+      - ../results:/app/results
+      - ../configs:/app/configs
+
+    # Environment variables
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+
+    # Keep container running for interactive use
+    stdin_open: true
+    tty: true
+
+    # Default command (can be overridden)
+    command: ["python", "scripts/run_benchmark.py", "--help"]
+
+  # CPU-only version for testing
+  stt-benchmark-cpu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.cpu
+    image: stt-benchmark:cpu
+    container_name: stt-benchmark-cpu
+
+    volumes:
+      - ../models:/app/models
+      - ../test_data:/app/test_data
+      - ../results:/app/results
+
+    stdin_open: true
+    tty: true
+
+    command: ["python", "scripts/run_benchmark.py", "--device", "cpu", "--help"]
+
+  # Offline server version (no internet access)
+  stt-benchmark-offline:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        INSTALL_WHISPER: "true"
+        INSTALL_WAV2VEC2: "true"
+    image: stt-benchmark:offline
+    container_name: stt-benchmark-offline
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+    volumes:
+      - ../models/weights:/app/models/weights:ro  # Read-only models
+      - ../test_data:/app/test_data:ro
+      - ../results:/app/results
+
+    environment:
+      - HF_DATASETS_OFFLINE=1
+      - TRANSFORMERS_OFFLINE=1
+      - HF_HUB_OFFLINE=1
+
+    # No network access
+    network_mode: none
+
+    stdin_open: true
+    tty: true
+
+# Networks (optional, for multi-container setups)
+networks:
+  default:
+    name: stt-benchmark-network

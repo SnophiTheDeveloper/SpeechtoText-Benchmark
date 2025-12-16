@@ -1,7 +1,7 @@
 # STT Benchmark Docker Image
 # Base: NVIDIA CUDA for GPU support
 
-FROM nvidia/cuda:12.1-runtime-ubuntu22.04
+FROM nvidia/cuda:12.4.1-runtime-ubuntu20.04
 
 # Prevent interactive prompts during build
 ENV DEBIAN_FRONTEND=noninteractive

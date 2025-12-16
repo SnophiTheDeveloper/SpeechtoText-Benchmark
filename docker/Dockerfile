@@ -1,30 +1,23 @@
 # STT Benchmark Docker Image
 # Base: NVIDIA CUDA for GPU support
 
-FROM nvidia/cuda:12.4.1-runtime-ubuntu20.04
+FROM nvidia/cuda:13.0.1-runtime-ubuntu22.04
 
 # Prevent interactive prompts during build
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies and Python 3.10 from deadsnakes PPA
+# Install system dependencies (Python 3.10 is native in Ubuntu 22.04)
 RUN apt-get update && apt-get install -y \
-    software-properties-common \
-    && add-apt-repository -y ppa:deadsnakes/ppa \
-    && apt-get update && apt-get install -y \
-    python3.10 \
-    python3.10-venv \
-    python3.10-distutils \
+    python3 \
+    python3-pip \
+    python3-venv \
     ffmpeg \
     libsndfile1 \
     git \
-    curl \
-    && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10 \
     && rm -rf /var/lib/apt/lists/*
 
-# Set Python 3.10 as default
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1 \
-    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1 \
-    && update-alternatives --install /usr/bin/pip pip /usr/local/bin/pip3.10 1
+# Set Python 3 as default
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
 # Create working directory
 WORKDIR /app
